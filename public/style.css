@@ -1,0 +1,45 @@
+body{
+    background: rgb(29, 29, 29);
+}
+
+nav {
+    background-color: rgb(10, 10, 10);
+    color: white;
+    display: flex;
+    padding: 30px 110px;
+    justify-content: space-between;
+}
+
+nav ul{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+nav li{
+    list-style: none;
+}
+
+nav li a{
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 20px;
+    cursor: pointer;
+}
+
+
+nav li a:hover{
+    color: grey;
+}
+
+.content{
+    color: whitesmoke;
+}
+
+.desc {
+    width: 1000px;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+}
