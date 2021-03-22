@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../lib/db');
+const { checkUsers } = require('../middleware/authMiddleware');
 
 
 /////CREATE/////
 
-router.get('/create', (req, res) => {
+router.get('/create',(req, res) => {
     res.render('news-create', {message: req.flash('message'), messageS: req.flash('messageS')});
 })
 

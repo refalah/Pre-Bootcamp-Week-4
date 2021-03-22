@@ -37,7 +37,7 @@ nav li a:hover{
     color: whitesmoke;
 }
 
-.desc {
+#desc {
     width: 1000px;
      white-space: nowrap;
      overflow: hidden;

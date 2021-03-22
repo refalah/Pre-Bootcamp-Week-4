@@ -5,13 +5,17 @@ const router = express.Router();
 const dotenv = require('dotenv');
 const db = require('../lib/db');
 const flash = require('express-flash');
+const jwt = require('jsonwebtoken');
+const { requireAuth, checkUser, checkUsers } = require('../middleware/authMiddleware');
 
 
 dotenv.config({path: '../.env'});
 
+const maxAge = process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
 
+//router.get('*', checkUsers)
 
-router.get('/', (req, res) => {
+router.get('/', requireAuth, (req, res) => {
     
     db.query('SELECT * FROM news ORDER BY id desc', (err, result) => {
         // if (err) throw err;
@@ -29,16 +33,9 @@ router.get('/', (req, res) => {
 })
 
 
-
-
-router.get('/news', (req, res) => {
-    res.render('newIndex')
-})
-
-
 /////LOGIN USER//////
 
-router.get('/login', (req, res) => {
+router.get('/login',(req, res) => {
     res.render('login' , {message: req.flash('message')})
 })
 
@@ -54,28 +51,29 @@ router.post('/login', async (req, res) => {
 
         db.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => {
             if(!result || !(await bcrypt.compare(password, result[0].password))){
-                // res.status(401).render('login', {message: 'Email/Password is incorrect'});
+                
                 req.flash('message', 'Email/Password is incorrect');
                 res.redirect('/login');
             } else {
-                // const id = result[0].id;
+                const id = result[0].id;
+                //const maxAge = process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
 
 
-                // const token = jwt.sign({id: id}, process.env.JWT_SECRET, {
-                //     expiresIn: process.env.JWT_EXPIRES_IN
-                // })
+                const token = jwt.sign({id: id}, process.env.JWT_SECRET, {
+                    expiresIn: process.env.JWT_EXPIRES_IN
+                })
 
-                // //console.log(`The token is: ${token}`);
+                console.log(`The token is: ${token}`);
 
-                // const cookieOptions = {
-                //     expires: new Date(
-                //         Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-                //     ),
-                //     httponly: true
-                // }
+                const cookieOptions = {
+                    expires: new Date(
+                        Date.now() + maxAge
+                    ),
+                    httponly: true
+                }
 
-                // res.cookie('jwt', token, cookieOptions);
-                res.status(200).redirect('/news');
+                res.cookie('jwt', token, cookieOptions);
+                res.status(200).redirect('/');
             }
         })
     } catch (error) {
@@ -124,7 +122,12 @@ router.post('/register', async (req, res) => {
 });
 
 
+/////Logout////
 
+router.get('/logout', (req, res) => {
+    res.cookie('jwt', '', {maxAge: 1});
+    res.redirect('/');
+})
 
 
 

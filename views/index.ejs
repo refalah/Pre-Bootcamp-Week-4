@@ -19,23 +19,26 @@
     <%- include('./nav.ejs') %>
 
     <div class="container mt-4">
+        <% if (data) { %> 
         <a href="/news/create" class="btn btn-success mb-4">Add New</a>
 
 
-
-        <% for (dat of data) { %> 
-        <div class="card" style="width: 100%;">
-            <div class="card-body">
-                <h5 class="card-title"><%= dat.title %></h5>
-                <p class="card-text desc"><%= dat.description %></p>
-                <a href="/news/edit/<%= dat.id %>" class="btn btn-primary">Edit</a>
-                <a href="/news/delete/<%= dat.id %>" class="btn btn-danger">Delete</a>
-                <a href="/news/read/<%= dat.id %>" class="btn btn-light">Read</a>
+        
+            <% for (dat of data) { %> 
+            <div class="card" style="width: 100%;">
+                <div class="card-body">
+                    
+                    <h5 class="card-title"><%= dat.title %></h5>
+                    <p class="card-text desc" id="desc"><%= dat.description %></p>
+                    <a href="/news/edit/<%= dat.id %>" class="btn btn-primary">Edit</a>
+                    <a href="/news/delete/<%= dat.id %>" class="btn btn-danger">Delete</a>
+                    <a href="/news/read/<%= dat.id %>" class="btn btn-light">Read</a>
+                </div>
             </div>
-        </div>
-        <br>
+            <br>
+            <% } %> 
+        <% } else { %> 
         <% } %> 
-
 
     </div>
 
