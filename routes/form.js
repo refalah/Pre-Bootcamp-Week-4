@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 const db = require('../lib/db');
 const flash = require('express-flash');
 const jwt = require('jsonwebtoken');
-const { requireAuth, checkUser, checkUsers } = require('../middleware/authMiddleware');
+const { requireAuth } = require('../middleware/authMiddleware');
 
 
 dotenv.config({path: '../.env'});
@@ -89,35 +89,41 @@ router.get('/register', (req, res) => {
 
 router.post('/register', async (req, res) => {
     const {name, email, password, passwordConfirm} = req.body;
+    let id = req.params.id
 
-    db.query('SELECT email FROM users WHERE email = ?', [email], async (err, result) =>{
+    db.query('SELECT email FROM users WHERE id = ?', [id], async (err, result) =>{
+        // if(err){
+        //     console.log(err);
+        // }
+        let hashedPassword = await bcrypt.hash(password, 8);
         if(err){
-            console.log(err);
+            throw err;
         }
 
         if(result.length > 0){
             //return res.render('register', {message: 'Email already taken'});
             req.flash('message', 'Email already taken');
-            res.redirect('/register');
-        } else if(password !== passwordConfirm){
+            res.redirect('register');
+        } 
+        else if(password !== passwordConfirm){
             //return res.render('register', {message: 'Password does not match'});
             req.flash('message', 'Password does not match');
-            res.redirect('/register');
+            res.redirect('register');
         }
 
-        let hashedPassword = await bcrypt.hash(password, 8);
-        console.log(hashedPassword);
+        
+        //console.log(hashedPassword);
 
         db.query('INSERT INTO users SET ?', {name: name, email: email, password: hashedPassword}, (err, result) => {
             if (err){
                 console.log(err);
             } else {
-                //return res.render('register', {messageS: 'Register Successful'});
-                res.redirect('/');
+                // req.flash('register', {messageS: 'Register Successful'});
+                res.redirect('/login');
             }
         })
-
-        res.redirect('/');
+        //res.end();
+        //res.redirect('/');
     })
 });
 

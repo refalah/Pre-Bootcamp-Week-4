@@ -1,9 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400&family=Open+Sans&display=swap');
+
+
 body{
     background: rgb(29, 29, 29);
+    font-family: 'Montserrat', sans-serif;
 }
 
 nav {
-    background-color: rgb(10, 10, 10);
+    background-color: rgba(10, 10, 10);
+    
+    background-size: cover;
     color: white;
     display: flex;
     padding: 30px 110px;

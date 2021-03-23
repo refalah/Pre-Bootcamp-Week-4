@@ -16,15 +16,17 @@
 
 <body>
 
-    <%- include('./nav.ejs') %>
+    
+
+    <%- include('./nav2.ejs') %> 
 
     <div class="container mt-4">
-        <% if (data) { %> 
+        
         <a href="/news/create" class="btn btn-success mb-4">Add New</a>
 
 
         
-            <% for (dat of data) { %> 
+        <% for (dat of data) { %> 
             <div class="card" style="width: 100%;">
                 <div class="card-body">
                     
@@ -36,9 +38,8 @@
                 </div>
             </div>
             <br>
-            <% } %> 
-        <% } else { %> 
         <% } %> 
+        
 
     </div>
 
