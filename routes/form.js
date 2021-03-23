@@ -91,7 +91,7 @@ router.post('/register', async (req, res) => {
     const {name, email, password, passwordConfirm} = req.body;
     let id = req.params.id
 
-    db.query('SELECT email FROM users WHERE id = ?', [id], async (err, result) =>{
+    db.query('SELECT email FROM users WHERE email = ?', [email], async (err, result) =>{
         // if(err){
         //     console.log(err);
         // }
@@ -100,15 +100,18 @@ router.post('/register', async (req, res) => {
             throw err;
         }
 
+        console.log(result)
+
         if(result.length > 0){
             //return res.render('register', {message: 'Email already taken'});
+            
             req.flash('message', 'Email already taken');
-            res.redirect('register');
+            return res.redirect('register');
         } 
         else if(password !== passwordConfirm){
             //return res.render('register', {message: 'Password does not match'});
             req.flash('message', 'Password does not match');
-            res.redirect('register');
+            return res.redirect('register');
         }
 
         
